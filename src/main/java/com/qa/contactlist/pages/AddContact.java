@@ -13,6 +13,21 @@ public class AddContact {
 	private String state;
 	private String postalCode;
 	private String country;
+	
+	public AddContact(String firstname, String lastname, String dob, String emailId, String phoneNum, String addr1,
+			String addr2, String city, String state, String postalCode, String country) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.dob = dob;
+		this.emailId = emailId;
+		this.phoneNum = phoneNum;
+		this.addr1 = addr1;
+		this.addr2 = addr2;
+		this.city = city;
+		this.state = state;
+		this.postalCode = postalCode;
+		this.country = country;
+	}
 	public String getFirstname() {
 		return firstname;
 	}

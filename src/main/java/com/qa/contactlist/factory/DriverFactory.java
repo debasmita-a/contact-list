@@ -35,7 +35,7 @@ public class DriverFactory {
 	public Properties initProp() {
 		prop = new Properties();
 		try {
-			FileInputStream fi = new FileInputStream("/contact-list/src/test/resources/config/config.properties");
+			FileInputStream fi = new FileInputStream("./src/test/resources/config/config.properties");
 			prop.load(fi);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

@@ -9,12 +9,14 @@ import org.testng.annotations.BeforeTest;
 import com.qa.contactlist.factory.DriverFactory;
 import com.qa.contactlist.pages.AddContact;
 import com.qa.contactlist.pages.ContactListPage;
+import com.qa.contactlist.pages.LoginPage;
 
 public class BaseTest {
 
-	DriverFactory df;
-	Properties prop;
-	WebDriver driver;
+	protected DriverFactory df;
+	protected Properties prop;
+	protected WebDriver driver;
+	protected LoginPage loginPage;
 	protected ContactListPage contactlistPage;
 	protected AddContact addContact;
 	
@@ -23,13 +25,13 @@ public class BaseTest {
 		df = new DriverFactory();
 		prop = df.initProp();
 		driver = df.initDriver(prop);
-		addContact = new AddContact();
-		contactlistPage = new ContactListPage(driver);
+		loginPage = new LoginPage(driver);
+		
 
 	}
 	
 	@AfterTest
 	public void teardown() {
-		driver.quit();
+		//driver.quit();
 	}
 }

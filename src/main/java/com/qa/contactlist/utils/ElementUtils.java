@@ -1,8 +1,13 @@
 package com.qa.contactlist.utils;
 
+import java.time.Duration;
+
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ElementUtils {
 
@@ -21,6 +26,7 @@ public class ElementUtils {
 	}
 	
 	public void doSendKeys(By locator, String keys) {
+		getElement(locator).clear();
 		getElement(locator).sendKeys(keys);
 	}
 	
@@ -34,5 +40,47 @@ public class ElementUtils {
 	
 	public void dismissAlert() {
 		driver.switchTo().alert().dismiss();	
+	}
+	
+	public String getPageUrl() {
+		return driver.getCurrentUrl();
+	}
+	
+//************************************************* wait utils **********************************************//
+	
+	public WebElement waitForElementPresence(By locator,int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(timeout));
+		return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+	}
+	
+	public WebElement waitForElementVisibility(By locator, int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+	}
+	
+	public Alert waitForAlert(int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+	    return wait.until(ExpectedConditions.alertIsPresent());
+	}
+	
+	public void acceptAlert(int timeout) {
+		waitForAlert(timeout).accept();	
+	}
+
+	public void dismissAlert(int timeout) {
+		waitForAlert(timeout).dismiss();
+	}
+	
+	public String getAlertText(int timeout) {
+		return waitForAlert(timeout).getText();
+	}
+	
+	public void doSendKeysWithWait(By locator,String value, int timeout) {
+		waitForElementPresence(locator, timeout).clear();
+		waitForElementPresence(locator, timeout).sendKeys(value);
+	}
+	
+	public void doClickWithWait(By locator,int timeout) {
+		waitForElementPresence(locator, timeout).click();
 	}
 }

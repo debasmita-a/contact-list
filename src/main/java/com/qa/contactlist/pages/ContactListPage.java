@@ -1,15 +1,10 @@
 package com.qa.contactlist.pages;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import com.qa.contactlist.utils.ElementUtils;
 
 public class ContactListPage {
@@ -33,6 +28,7 @@ public class ContactListPage {
 	private By editBtn = By.xpath("//button[text()='Edit Contact']");
 	private By addAContactBtn = By.id("add-contact");
 	private By returnToListBtn = By.id("return");
+	private By contactDetailsHeader = By.xpath("//h1");
 	
 	public ContactListPage(WebDriver driver) {
 		this.driver = driver;
@@ -40,10 +36,8 @@ public class ContactListPage {
 	}
 	
 	private void fillContactDetails(AddContact addContact) {
-		//utils.doSendKeys(firstname, addContact.getFirstname());
-		utils.doSendKeysWithWait(firstname, addContact.getFirstname(), 3);
-		utils.doSendKeysWithWait(lastname, addContact.getLastname(), 3);
-		//utils.doSendKeys(lastname, addContact.getLastname());
+		utils.doSendKeys(firstname, addContact.getFirstname());
+		utils.doSendKeys(lastname, addContact.getLastname());
 		utils.doSendKeys(dob, addContact.getDob());
 		utils.doSendKeys(emailId, addContact.getEmailId());
 		utils.doSendKeys(phoneNum, addContact.getPhoneNum());
@@ -53,45 +47,53 @@ public class ContactListPage {
 		utils.doSendKeys(state, addContact.getState());
 		utils.doSendKeys(postalCode, addContact.getPostalCode());
 		utils.doSendKeys(country, addContact.getCountry());
-		utils.doClickWithWait(submitBtn, 3);
+		utils.doClick(submitBtn);
 	}
 	
 	public void clickAddAContactBtn() {
-		utils.doClickWithWait(addAContactBtn, 3);
+		utils.doClick(addAContactBtn);
 	}
 	
 	public String addAContact(AddContact addContact) {
 		clickAddAContactBtn();
 		fillContactDetails(addContact);	
-		String name = utils.waitForElementVisibility(By.xpath("//tr/td[contains(text(),'"+addContact.getFirstname()+"')]"),3).getText();
+		String name = utils.doGetText(By.xpath("//tr/td[contains(text(),'"+addContact.getFirstname()+"')]"));
 		System.out.println(name);
 		return name;
 	}
 	
-	public Map<String, String> getContact(String fname) {
+	public Map<String, String> getContact(String fname) throws InterruptedException {
 		Map<String, String> contactMap = new HashMap<String, String>();	
-		utils.waitForElementVisibility(By.xpath("//tr/td[contains(text(),'"+fname+"')]"),3).click();
-		contactMap.put("FirstName", utils.waitForElementVisibility(firstname,3).getText());
-		contactMap.put("LastName", utils.waitForElementVisibility(lastname,3).getText());
+		utils.doClick(By.xpath("//tr/td[contains(text(),'"+fname+"')]"));
+		Thread.sleep(2000);
+		contactMap.put("FirstName", utils.doGetText(firstname));
+		contactMap.put("LastName", utils.doGetText(lastname));
 		
 		System.out.println(contactMap);
-		utils.doClickWithWait(returnToListBtn, 3);
+		utils.doClick(returnToListBtn);
 		
 		return contactMap;
 	}
 	
-	public void updateContact(AddContact addContact, String fname) {
-		utils.doClickWithWait(By.xpath("//tr/td[contains(text(),'"+fname+"')]"), 3);
-		utils.doClickWithWait(editBtn, 3);
+	public String updateContact(AddContact addContact, String fname) throws InterruptedException{
+		utils.doClick(By.xpath("//tr/td[contains(text(),'"+fname+"')]"));
+		utils.doClick(editBtn);
 		fillContactDetails(addContact);
+		Thread.sleep(2000);
+		String header = utils.doGetText(contactDetailsHeader);
+		System.out.println(header);
+		utils.doClick(returnToListBtn); 
+		return header;
+		
 	}
 	
-	public boolean deleteContact(String fname) {
-		utils.doClickWithWait(By.xpath("//tr/td[contains(text(),'"+fname+"')]"), 3);
-		utils.doClickWithWait(deleteBtn, 3);
+	public boolean deleteContact(String fname) throws InterruptedException {
+		utils.doClick(By.xpath("//tr/td[contains(text(),'"+fname+"')]"));
+		utils.doClick(deleteBtn);
 		utils.acceptAlert(3);
+		Thread.sleep(2000);
 		try {
-		utils.getElement(By.xpath("//tr/td[contains(text(),'"+fname+"')]")).isDisplayed(); 
+		utils.isElementDisplayed(By.xpath("//tr/td[contains(text(),'"+fname+"')]")); 
 			return true;
 		}catch(NoSuchElementException e) {
 			return false;

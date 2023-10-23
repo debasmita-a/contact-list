@@ -46,6 +46,10 @@ public class ElementUtils {
 		return driver.getCurrentUrl();
 	}
 	
+	public boolean isElementDisplayed(By locator) {
+		return driver.findElement(locator).isDisplayed();
+	}
+	
 //************************************************* wait utils **********************************************//
 	
 	public WebElement waitForElementPresence(By locator,int timeout) {
@@ -82,5 +86,15 @@ public class ElementUtils {
 	
 	public void doClickWithWait(By locator,int timeout) {
 		waitForElementPresence(locator, timeout).click();
+	}
+	
+	public boolean getCurrentUrlWithWait(int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+		return wait.until(ExpectedConditions.urlContains(getPageUrl()));
+	}
+	
+	public boolean getTextVisibleWithWait(By locator, String text, int timeout) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+		return wait.until(ExpectedConditions.textToBePresentInElementLocated(locator, text));
 	}
 }

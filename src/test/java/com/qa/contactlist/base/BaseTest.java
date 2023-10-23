@@ -18,7 +18,6 @@ public class BaseTest {
 	protected WebDriver driver;
 	protected LoginPage loginPage;
 	protected ContactListPage contactlistPage;
-	protected AddContact addContact;
 	
 	@BeforeTest
 	public void setup() {
@@ -26,8 +25,6 @@ public class BaseTest {
 		prop = df.initProp();
 		driver = df.initDriver(prop);
 		loginPage = new LoginPage(driver);
-		
-
 	}
 	
 	@AfterTest

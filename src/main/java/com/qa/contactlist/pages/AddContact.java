@@ -28,6 +28,11 @@ public class AddContact {
 		this.postalCode = postalCode;
 		this.country = country;
 	}
+	
+	public AddContact(String firstname, String lastname) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
 	public String getFirstname() {
 		return firstname;
 	}
